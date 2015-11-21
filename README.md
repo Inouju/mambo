@@ -14,7 +14,7 @@ mind sharing it.
 
 ### Requirements
 * Erlang (R16B or later) - there are pre built packages in the [Erlang Solutions Downloads page](https://www.erlang-solutions.com/downloads/download-erlang-otp)
-* Elixir - see [here](http://elixir-lang.org/getting_started/1.html) for installation instructions
+* Elixir 0.12.4
 * Server query login credentials
 * The script `gif.ex` also requires [ImageMagick](http://www.imagemagick.org/script/index.php) to be installed.
 
