@@ -1,3 +1,9 @@
+# WARNING: This project is no longer maintained
+
+The bot only works with a teamspeak 3 server ≤ 3.0.10. Don't ask for updates, it won't happen.
+
+---
+
 # Mambo
 
 Mambo is an extensible teamspeak 3 chat bot. If you're using the bot, or have written
