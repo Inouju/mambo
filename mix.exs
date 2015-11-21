@@ -5,6 +5,7 @@ defmodule Mambo.Mixfile do
     [
       app: :mambo,
       version: "0.3.0",
+      elixir: "~> 0.12.4",
       deps: deps
     ]
   end
