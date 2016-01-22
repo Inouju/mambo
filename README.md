@@ -1,20 +1,16 @@
-# WARNING: This project is no longer maintained
-
-The bot only works with a teamspeak 3 server ≤ 3.0.10. Don't ask for updates, it won't happen.
-
----
-
 # Mambo
 
 Mambo is an extensible teamspeak 3 chat bot. If you're using the bot, or have written
 some scripts for it, please let me know, I'd love to hear what your doing if you don't
 mind sharing it.
 
+This project was originally written by MrShankly, and is being updated by Inouju.
+
 ## Getting Started
 
 ### Requirements
-* Erlang (R16B or later) - there are pre built packages in the [Erlang Solutions Downloads page](https://www.erlang-solutions.com/downloads/download-erlang-otp)
-* Elixir 0.12.4
+* Erlang (18.0 or later) - there are pre built packages in the [Erlang Solutions Downloads page](https://www.erlang-solutions.com/downloads/download-erlang-otp)
+* Elixir 1.2
 * Server query login credentials
 * The script `gif.ex` also requires [ImageMagick](http://www.imagemagick.org/script/index.php) to be installed.
 
@@ -44,14 +40,14 @@ related to configuration is done in the `settings.json` file.
 * `channels`: List of the channels the bot will join, this can be either a list of channel ids or the string "all" to join all the channels
 * `scripts`: List of scripts that the bot will use, put only the scripts you want to use
 
-Use the file [`settings.sample.json`](https://raw.github.com/mrshankly/mambo/master/settings.json.sample) as a guide, edit the values that you don't like,
+Use the file [`settings.sample.json`](https://raw.github.com/inouju/mambo/master/settings.json.sample) as a guide, edit the values that you don't like,
 remove the scripts you don't want to use from the list and when you're happy
 rename it to `settings.json`.
 
 ### Compile and run
 
 When you have a working installation of elixir and the bot is properly configured,
-download the [source code](https://github.com/mrshankly/mambo/archive/master.zip) and extract it to a directory of your choosing.
+download the [source code](https://github.com/inouju/mambo/archive/master.zip) and extract it to a directory of your choosing.
 Open a terminal window and do the following:
 
 ```sh
@@ -75,7 +71,7 @@ $ iex -S mix
 ```
 
 I recommend running the bot with an elixir shell, this way you can have some
-feedback and easily manage the bot without turning it off (see [Managing the bot](https://github.com/mrshankly/mambo#managing-the-bot)
+feedback and easily manage the bot without turning it off (see [Managing the bot](https://github.com/inouju/mambo#managing-the-bot)
 for more info). In Linux (and Mac OS X too I guess) you can use [tmux](http://tmux.sourceforge.net/)
 or [screen](https://www.gnu.org/software/screen/) to keep the shell running.
 I don't know about Windows, google is your friend here.
@@ -91,28 +87,28 @@ Here's the full list of provided scripts:
 
 | Script | Commands |
 |--------|----------|
-| [`admin.ex`](https://github.com/mrshankly/mambo/blob/master/lib/scripts/admin.ex#L2-L10) | `.mute`,`.unmute`,`.gm <message>`,`.rename <name>` |
-| [`benis.ex`](https://github.com/mrshankly/mambo/blob/master/lib/scripts/benis.ex#L2-L7) | `.benis <expression>` |
-| [`brainfuck.ex`](https://github.com/mrshankly/mambo/blob/master/lib/scripts/brainfuck.ex#L2-L7) | `.bf <brainfuck_expression>` |
-| [`cannedreplies.ex`](https://github.com/mrshankly/mambo/blob/master/lib/scripts/cannedreplies.ex#L2-L13) | `cool`,`gface`,`goface`,`edgyface`,`dface`,`ggface`,`chownface` |
-| [`eightball.ex`](https://github.com/mrshankly/mambo/blob/master/lib/scripts/eightball.ex#L2-L7) | `.8ball <question>` |
-| [`gif.ex`](https://github.com/mrshankly/mambo/blob/master/lib/scripts/gif.ex#L2-L10) | `.gif <gif_link>` |
-| [`google.ex`](https://github.com/mrshankly/mambo/blob/master/lib/scripts/google.ex#L2-L11) | `.g <phrase>`,`.google <phrase>`,`.img <phrase>`,`.image <phrase>`,`.images <phrase>` |
-| [`help.ex`](https://github.com/mrshankly/mambo/blob/master/lib/scripts/help.ex#L2-L7) | `.help` |
-| [`lastfm.ex`](https://github.com/mrshankly/mambo/blob/master/lib/scripts/lastfm.ex#L2-L9) | `.np`,`.np <last.fm user>`,`.np set <last.fm user>` |
-| [`private.ex`](https://github.com/mrshankly/mambo/blob/master/lib/scripts/private.ex#L2-L7) | `.private` |
-| [`quotes.ex`](https://github.com/mrshankly/mambo/blob/master/lib/scripts/quotes.ex#L2-L11) | `.quote`,`.quote <id>`,`.quote add <quote>`,`.quote find <search query>`,`.quote rm <id` |
-| [`rainbow.ex`](https://github.com/mrshankly/mambo/blob/master/lib/scripts/rainbow.ex#L2-L8) | `.r <expression>`,`.rainbow <expression>` |
-| [`random.ex`](https://github.com/mrshankly/mambo/blob/master/lib/scripts/random.ex#L2-L10) | `.roll`,`.rock`,`.paper`,`.scissors` |
-| [`sux.ex`](https://github.com/mrshankly/mambo/blob/master/lib/scripts/sux.ex#L2-L7) | `.sux <expression>` |
-| [`title.ex`](https://github.com/mrshankly/mambo/blob/master/lib/scripts/title.ex#L2-L8) | **none** |
-| [`translate.ex`](https://github.com/mrshankly/mambo/blob/master/lib/scripts/translate.ex#L2-L8) |  `.tl <phrase>`,`.translate <phrase>`,`.translate <input language> <target language> <phrase>` |
-| [`twitter.ex`](https://github.com/mrshankly/mambo/blob/master/lib/scripts/twitter.ex#L2-L4) | **none** |
-| [`urban.ex`](https://github.com/mrshankly/mambo/blob/master/lib/scripts/urban.ex#L2-L8) | `.ud <term>`,`.urban <term>` |
-| [`utils.ex`](https://github.com/mrshankly/mambo/blob/master/lib/scripts/utils.ex#L2-L11) | `.ping`,`.date`,`.time`,`.uptime`,`.version` |
-| [`whatthecommit.ex`](https://github.com/mrshankly/mambo/blob/master/lib/scripts/whatthecommit.ex#L2-L7) | `.wtc` |
-| [`wolframalpha.ex`](https://github.com/mrshankly/mambo/blob/master/lib/scripts/wolframalpha.ex#L2-L9) | `.wa <expression>`,`.calc <expression>`,`.convert <expression> to <units>` |
-| [`youtube.ex`](https://github.com/mrshankly/mambo/blob/master/lib/scripts/youtube.ex#L2-L8) | `.yt <phrase>`,`.youtube <phrase>` |
+| [`admin.ex`](https://github.com/inouju/mambo/blob/master/lib/scripts/admin.ex#L2-L10) | `.mute`,`.unmute`,`.gm <message>`,`.rename <name>` |
+| [`benis.ex`](https://github.com/inouju/mambo/blob/master/lib/scripts/benis.ex#L2-L7) | `.benis <expression>` |
+| [`brainfuck.ex`](https://github.com/inouju/mambo/blob/master/lib/scripts/brainfuck.ex#L2-L7) | `.bf <brainfuck_expression>` |
+| [`cannedreplies.ex`](https://github.com/inouju/mambo/blob/master/lib/scripts/cannedreplies.ex#L2-L13) | `cool`,`gface`,`goface`,`edgyface`,`dface`,`ggface`,`chownface` |
+| [`eightball.ex`](https://github.com/inouju/mambo/blob/master/lib/scripts/eightball.ex#L2-L7) | `.8ball <question>` |
+| [`gif.ex`](https://github.com/inouju/mambo/blob/master/lib/scripts/gif.ex#L2-L10) | `.gif <gif_link>` |
+| [`google.ex`](https://github.com/inouju/mambo/blob/master/lib/scripts/google.ex#L2-L11) | `.g <phrase>`,`.google <phrase>`,`.img <phrase>`,`.image <phrase>`,`.images <phrase>` |
+| [`help.ex`](https://github.com/inouju/mambo/blob/master/lib/scripts/help.ex#L2-L7) | `.help` |
+| [`lastfm.ex`](https://github.com/inouju/mambo/blob/master/lib/scripts/lastfm.ex#L2-L9) | `.np`,`.np <last.fm user>`,`.np set <last.fm user>` |
+| [`private.ex`](https://github.com/inouju/mambo/blob/master/lib/scripts/private.ex#L2-L7) | `.private` |
+| [`quotes.ex`](https://github.com/inouju/mambo/blob/master/lib/scripts/quotes.ex#L2-L11) | `.quote`,`.quote <id>`,`.quote add <quote>`,`.quote find <search query>`,`.quote rm <id` |
+| [`rainbow.ex`](https://github.com/inouju/mambo/blob/master/lib/scripts/rainbow.ex#L2-L8) | `.r <expression>`,`.rainbow <expression>` |
+| [`random.ex`](https://github.com/inouju/mambo/blob/master/lib/scripts/random.ex#L2-L10) | `.roll`,`.rock`,`.paper`,`.scissors` |
+| [`sux.ex`](https://github.com/inouju/mambo/blob/master/lib/scripts/sux.ex#L2-L7) | `.sux <expression>` |
+| [`title.ex`](https://github.com/inouju/mambo/blob/master/lib/scripts/title.ex#L2-L8) | **none** |
+| [`translate.ex`](https://github.com/inouju/mambo/blob/master/lib/scripts/translate.ex#L2-L8) |  `.tl <phrase>`,`.translate <phrase>`,`.translate <input language> <target language> <phrase>` |
+| [`twitter.ex`](https://github.com/inouju/mambo/blob/master/lib/scripts/twitter.ex#L2-L4) | **none** |
+| [`urban.ex`](https://github.com/inouju/mambo/blob/master/lib/scripts/urban.ex#L2-L8) | `.ud <term>`,`.urban <term>` |
+| [`utils.ex`](https://github.com/inouju/mambo/blob/master/lib/scripts/utils.ex#L2-L11) | `.ping`,`.date`,`.time`,`.uptime`,`.version` |
+| [`whatthecommit.ex`](https://github.com/inouju/mambo/blob/master/lib/scripts/whatthecommit.ex#L2-L7) | `.wtc` |
+| [`wolframalpha.ex`](https://github.com/inouju/mambo/blob/master/lib/scripts/wolframalpha.ex#L2-L9) | `.wa <expression>`,`.calc <expression>`,`.convert <expression> to <units>` |
+| [`youtube.ex`](https://github.com/inouju/mambo/blob/master/lib/scripts/youtube.ex#L2-L8) | `.yt <phrase>`,`.youtube <phrase>` |
 
 ### Scripting
 
@@ -149,38 +145,38 @@ Scripts will receive notifications of the following events:
 
 The modules `Mambo.Bot` and `Mambo.Brain` implement various functions meant to be used by the scripts:
 
-#### [`Mambo.Bot`](https://github.com/mrshankly/mambo/blob/master/lib/mambo/bot.ex)
+#### [`Mambo.Bot`](https://github.com/inouju/mambo/blob/master/lib/mambo/bot.ex)
 
-* [`id/0`](https://github.com/mrshankly/mambo/blob/master/lib/mambo/bot.ex#L37)
-* [`admins/0`](https://github.com/mrshankly/mambo/blob/master/lib/mambo/bot.ex#L45)
-* [`scripts/0`](https://github.com/mrshankly/mambo/blob/master/lib/mambo/bot.ex#L53)
-* [`send_msg/2`](https://github.com/mrshankly/mambo/blob/master/lib/mambo/bot.ex#L61)
-* [`send_privmsg/2`](https://github.com/mrshankly/mambo/blob/master/lib/mambo/bot.ex#L69)
-* [`send_gm/1`](https://github.com/mrshankly/mambo/blob/master/lib/mambo/bot.ex#L77)
-* [`kick/2`](https://github.com/mrshankly/mambo/blob/master/lib/mambo/bot.ex#L85)
-* [`ban/3`](https://github.com/mrshankly/mambo/blob/master/lib/mambo/bot.ex#L93)
-* [`move/2`](https://github.com/mrshankly/mambo/blob/master/lib/mambo/bot.ex#L101)
-* [`move/3`](https://github.com/mrshankly/mambo/blob/master/lib/mambo/bot.ex#L113)
-* [`mute/1`](https://github.com/mrshankly/mambo/blob/master/lib/mambo/bot.ex#L124)
-* [`unmute/1`](https://github.com/mrshankly/mambo/blob/master/lib/mambo/bot.ex#L132)
-* [`rename/1`](https://github.com/mrshankly/mambo/blob/master/lib/mambo/bot.ex#L140)
-* [`add_watcher/1`](https://github.com/mrshankly/mambo/blob/master/lib/mambo/bot.ex#L148)
-* [`remove_watcher/1`](https://github.com/mrshankly/mambo/blob/master/lib/mambo/bot.ex#L156)
+* [`id/0`](https://github.com/inouju/mambo/blob/master/lib/mambo/bot.ex#L37)
+* [`admins/0`](https://github.com/inouju/mambo/blob/master/lib/mambo/bot.ex#L45)
+* [`scripts/0`](https://github.com/inouju/mambo/blob/master/lib/mambo/bot.ex#L53)
+* [`send_msg/2`](https://github.com/inouju/mambo/blob/master/lib/mambo/bot.ex#L61)
+* [`send_privmsg/2`](https://github.com/inouju/mambo/blob/master/lib/mambo/bot.ex#L69)
+* [`send_gm/1`](https://github.com/inouju/mambo/blob/master/lib/mambo/bot.ex#L77)
+* [`kick/2`](https://github.com/inouju/mambo/blob/master/lib/mambo/bot.ex#L85)
+* [`ban/3`](https://github.com/inouju/mambo/blob/master/lib/mambo/bot.ex#L93)
+* [`move/2`](https://github.com/inouju/mambo/blob/master/lib/mambo/bot.ex#L101)
+* [`move/3`](https://github.com/inouju/mambo/blob/master/lib/mambo/bot.ex#L113)
+* [`mute/1`](https://github.com/inouju/mambo/blob/master/lib/mambo/bot.ex#L124)
+* [`unmute/1`](https://github.com/inouju/mambo/blob/master/lib/mambo/bot.ex#L132)
+* [`rename/1`](https://github.com/inouju/mambo/blob/master/lib/mambo/bot.ex#L140)
+* [`add_watcher/1`](https://github.com/inouju/mambo/blob/master/lib/mambo/bot.ex#L148)
+* [`remove_watcher/1`](https://github.com/inouju/mambo/blob/master/lib/mambo/bot.ex#L156)
 
-#### [`Mambo.Brain`](https://github.com/mrshankly/mambo/blob/master/lib/mambo/brain.ex) - bot's memory
+#### [`Mambo.Brain`](https://github.com/inouju/mambo/blob/master/lib/mambo/brain.ex) - bot's memory
 
-* [`add_quote/2`](https://github.com/mrshankly/mambo/blob/master/lib/mambo/brain.ex#L13)
-* [`find_quotes/1`](https://github.com/mrshankly/mambo/blob/master/lib/mambo/brain.ex#L19)
-* [`remove_quote/1`](https://github.com/mrshankly/mambo/blob/master/lib/mambo/brain.ex#L36)
-* [`get_quote/1`](https://github.com/mrshankly/mambo/blob/master/lib/mambo/brain.ex#L41)
-* [`get_random_quote/0`](https://github.com/mrshankly/mambo/blob/master/lib/mambo/brain.ex#L51)
-* [`quotes_max/0`](https://github.com/mrshankly/mambo/blob/master/lib/mambo/brain.ex#L60)
-* [`add_lastfm_user/2`](https://github.com/mrshankly/mambo/blob/master/lib/mambo/brain.ex#L69)
-* [`get_lastfm_user/1`](https://github.com/mrshankly/mambo/blob/master/lib/mambo/brain.ex#L74)
-* [`remove_lastfm_user/1`](https://github.com/mrshankly/mambo/blob/master/lib/mambo/brain.ex#L84)
-* [`put/2`](https://github.com/mrshankly/mambo/blob/master/lib/mambo/brain.ex#L91)
-* [`get/1`](https://github.com/mrshankly/mambo/blob/master/lib/mambo/brain.ex#L96)
-* [`remove/1`](https://github.com/mrshankly/mambo/blob/master/lib/mambo/brain.ex#L106)
+* [`add_quote/2`](https://github.com/inouju/mambo/blob/master/lib/mambo/brain.ex#L13)
+* [`find_quotes/1`](https://github.com/inouju/mambo/blob/master/lib/mambo/brain.ex#L19)
+* [`remove_quote/1`](https://github.com/inouju/mambo/blob/master/lib/mambo/brain.ex#L36)
+* [`get_quote/1`](https://github.com/inouju/mambo/blob/master/lib/mambo/brain.ex#L41)
+* [`get_random_quote/0`](https://github.com/inouju/mambo/blob/master/lib/mambo/brain.ex#L51)
+* [`quotes_max/0`](https://github.com/inouju/mambo/blob/master/lib/mambo/brain.ex#L60)
+* [`add_lastfm_user/2`](https://github.com/inouju/mambo/blob/master/lib/mambo/brain.ex#L69)
+* [`get_lastfm_user/1`](https://github.com/inouju/mambo/blob/master/lib/mambo/brain.ex#L74)
+* [`remove_lastfm_user/1`](https://github.com/inouju/mambo/blob/master/lib/mambo/brain.ex#L84)
+* [`put/2`](https://github.com/inouju/mambo/blob/master/lib/mambo/brain.ex#L91)
+* [`get/1`](https://github.com/inouju/mambo/blob/master/lib/mambo/brain.ex#L96)
+* [`remove/1`](https://github.com/inouju/mambo/blob/master/lib/mambo/brain.ex#L106)
 
 If you need an http client in your script use [`hackney`](https://github.com/benoitc/hackney).
 If you need to decode or encode json use [`jsx`](https://github.com/talentdeficit/jsx).
@@ -190,18 +186,18 @@ They will both be installed when you do `mix deps.get` during the installation p
 
 **Note:** This requires to start the bot with `iex -S mix`.
 
-All the functions mentioned in [exports](https://github.com/mrshankly/mambo#exports) are available for you to use in an
+All the functions mentioned in [exports](https://github.com/inouju/mambo#exports) are available for you to use in an
 elixir shell.
 
 To manage scripts, load, unload, notify or get a list of the running scripts, use the
-API from the module [`Mambo.EventManager`](https://github.com/mrshankly/mambo/blob/master/lib/mambo/event_manager.ex).
+API from the module [`Mambo.EventManager`](https://github.com/inouju/mambo/blob/master/lib/mambo/event_manager.ex).
 
 This should be enough to manage the bot without ever shutting it down, even adding
 new plugins.
 
 ## Getting help
 
-You can get help by [making an issue](https://github.com/mrshankly/mambo/issues) on GitHub, or going
+You can get help by [making an issue](https://github.com/inouju/mambo/issues) on GitHub, or going
 to the [official thread](http://forum.teamspeak.com/showthread.php/93066-Chat-bot-Mambo-IRC-style-bot-for-teamspeak-3)
 in the teamspeak forums. If you are already knowledgable about Mambo, please
 consider contributing for the sake of others.
@@ -209,4 +205,4 @@ consider contributing for the sake of others.
 ## License
 
 All files under this repository fall under the MIT License. Check
-[LICENSE](https://github.com/mrshankly/mambo/blob/master/LICENSE) for more details.
+[LICENSE](https://github.com/inouju/mambo/blob/master/LICENSE) for more details.
