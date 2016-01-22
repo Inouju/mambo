@@ -8,7 +8,7 @@ defmodule Lastfm do
     .np set <last.fm user>
   """
 
-  use GenEvent.Behaviour
+  use GenEvent
 
   def init(apikey) do
     {:ok, apikey}
@@ -54,21 +54,21 @@ defmodule Lastfm do
     url = "http://ws.audioscrobbler.com/2.0/?" <>
       URI.encode_query([method: "user.getrecenttracks", user: u, api_key: k,
         format: "json"])
-
     case :hackney.get(url, [], <<>>, []) do
       {:ok, 200, _, client} ->
         {:ok, body} = :hackney.body(client)
-        case :jsx.decode(body)["recenttracks"] do
+        case :jsx.decode(body, [{:labels, :atom}])[:recenttracks] do
           nil ->
             Mambo.Bot.send_msg("No result.", cid)
           t ->
-            case t["track"] do
+            case t[:track] do
               nil ->
                 Mambo.Bot.send_msg("No result.", cid)
               [s | _] ->
-                name   = s["name"]
-                artist = s["artist"]
-                Mambo.Bot.send_msg("[b]#{name}[/b] by [b]#{artist["#text"]}[/b].", cid)
+                s = List.flatten(s)
+                name   = elem(List.keyfind(s, :name, 0), 1)
+                artist = elem(List.keyfind(s, :artist, 0), 1)
+                Mambo.Bot.send_msg("[b]#{name}[/b] by [b]#{elem(List.keyfind(artist, :"#text", 0), 1)}[/b].", cid)
             end
         end
       _ ->

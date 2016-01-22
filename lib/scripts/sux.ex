@@ -6,7 +6,7 @@ defmodule Sux do
     .sux <word> | <phrase>
   """
 
-  use GenEvent.Behaviour
+  use GenEvent
 
   def init(_) do
     {:ok, []}

@@ -4,7 +4,7 @@ defmodule Mambo.Watcher do
   a chat message comes up.
   """
 
-  use GenServer.Behaviour
+  use GenServer
 
   @nmsg     "notifytextmessage"
   @nmove    "notifyclientmoved"
@@ -36,7 +36,7 @@ defmodule Mambo.Watcher do
   # gen_server callbacks
 
   def init({cid, default_cid, bot_id, {name, host, port, user, pass}}) do
-    {:ok, socket} = :gen_tcp.connect(String.to_char_list!(host), port, [:binary])
+    {:ok, socket} = :gen_tcp.connect(String.to_char_list(host), port, [:binary])
     login(socket, cid, name, user, pass)
     :erlang.send_after(300000, self(), :keep_alive)
     {:ok, {:unmute, socket, {cid, default_cid}, bot_id}}
@@ -91,7 +91,7 @@ defmodule Mambo.Watcher do
         if cid != dcid do
           send_to_server(socket, "clientmove clid=#{clid} cid=#{cid}")
         end
-        {:noreply, {:unmute, socket, {binary_to_integer(clid), cid, bid}}}
+        {:noreply, {:unmute, socket, {String.to_integer(clid), cid, bid}}}
       _ ->
         {:noreply, state}
     end
@@ -125,23 +125,23 @@ defmodule Mambo.Watcher do
   end
 
   def handle_info({:tcp, _, <<@nmove, r :: binary>>}, {:unmute, _, {clid,cid,_}} = state) do
-    scid = integer_to_binary(cid)
-    sclid = integer_to_binary(clid)
+    scid = Integer.to_string(cid)
+    sclid = Integer.to_string(clid)
     case Regex.run(~r/ctid=(\d*) reasonid=(\d*).*?clid=(\d*)/i, r) do
       [_, _, "4", ^sclid] ->
         Mambo.Bot.remove_watcher(cid)
         {:noreply, state}
 
       [_, ^scid, reasonid, iclid] ->
-        iclid = binary_to_integer(iclid)
-        reasonid = binary_to_integer(reasonid)
+        iclid = String.to_integer(iclid)
+        reasonid = String.to_integer(reasonid)
         Mambo.EventManager.notify({:move_in, {cid, reasonid, iclid}})
         {:noreply, state}
 
       [_, ocid, reasonid, oclid] ->
-        ocid = binary_to_integer(ocid)
-        oclid = binary_to_integer(oclid)
-        reasonid = binary_to_integer(reasonid)
+        ocid = String.to_integer(ocid)
+        oclid = String.to_integer(oclid)
+        reasonid = String.to_integer(reasonid)
         Mambo.EventManager.notify({:move_out, {ocid, reasonid, oclid}})
         {:noreply, state}
 

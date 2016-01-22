@@ -6,7 +6,7 @@ defmodule Private do
     .private
   """
 
-  use GenEvent.Behaviour
+  use GenEvent
 
   def init(_) do
     {:ok, []}

@@ -1,7 +1,7 @@
 defmodule Mambo.WatcherSup do
   @moduledoc false
 
-  use Supervisor.Behaviour
+  use Supervisor
 
   # Types.
   @type error :: :not_found | :simple_one_for_one

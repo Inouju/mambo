@@ -4,7 +4,7 @@ defmodule Mambo.Supervisor do
   and `Mambo.EventManager`.
   """
 
-  use Supervisor.Behaviour
+  use Supervisor
 
   @supervisor __MODULE__
 

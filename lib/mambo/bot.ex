@@ -3,14 +3,14 @@ defmodule Mambo.Bot do
   Responsible for connecting to the teamspeak server, also acts as a bridge
   between the teamspeak server and the plugins. Supervised by `Mambo.Supervisor`.
   """
-
-  use GenServer.Behaviour
-
+  
+  require Record
+  use GenServer
   @bot __MODULE__
 
   @notify_msg "notifytextmessage"
 
-  defrecord Settings,
+  Record.defrecord :settings, [
     name:     "mambo",
     user:     "username",
     pass:     "password",
@@ -21,12 +21,14 @@ defmodule Mambo.Bot do
     channels: [],
     scripts:  [],
     default_channel: 1
+  ]
 
   # API.
 
   @spec start_link() :: {:ok, pid}
   def start_link() do
     s = Mambo.Helpers.get_settings()
+    s = settings(s)
     {:ok, _} = :gen_server.start_link({:local, @bot}, __MODULE__, s, [])
   end
 
@@ -175,20 +177,20 @@ defmodule Mambo.Bot do
     String.split(channellist, "|")
       |> Enum.map(&Regex.run(~r/cid=(\d*).*?channel_flag_default=([0-1])/, &1))
       |> Enum.map_reduce(1, fn
-        ([_,id,"0"], dc) -> {binary_to_integer(id), dc}
-        ([_,id,"1"], _) -> id = binary_to_integer(id); {id, id}
+        ([_,id,"0"], dc) -> {String.to_integer(id), dc}
+        ([_,id,"1"], _) -> id = String.to_integer(id); {id, id}
         (_, _) -> {[], 1}
       end)
   end
 
   defp add_watchers(ids, s) do
     start_watcher = fn(id, count) ->
-      {:ok, pid} = Mambo.WatcherSup.add_watcher([{id, s.default_channel, s.bot_id,
-        {"#{s.name}#{count}", s.host, s.port, s.user, s.pass}}])
+      {:ok, pid} = Mambo.WatcherSup.add_watcher([{id, s[:default_channel], s[:bot_id],
+        {"#{s[:name]}_#{count}", s[:host], s[:port], s[:user], s[:pass]}}])
       pid
     end
 
-    {watchers, _} = case s.channels do
+    {watchers, _} = case s[:channels] do
       "all" ->
         Enum.map_reduce(ids, 0, fn(id, count) ->
           {{id, start_watcher.(id, Mambo.Helpers.get_extra(count))}, count + 1}
@@ -211,23 +213,27 @@ defmodule Mambo.Bot do
   # gen_sever callbacks.
 
   def init(s) do
-    {:ok, socket} = :gen_tcp.connect(String.to_char_list!(s.host), s.port, [:binary])
-    lc {m, a} inlist s.scripts, do: Mambo.EventManager.install_script(m, a)
-    :ok = login(socket, s.name, s.user, s.pass)
-    :erlang.send_after(300000, self(), :keep_alive)
-    {:ok, {socket, s, [], ""}}
+    case :gen_tcp.connect(String.to_char_list(s[:host]), s[:port], [:binary]) do
+      {:ok, socket} ->
+        for {m, a} <- s[:scripts], do: Mambo.EventManager.install_script(String.to_atom("Elixir.#{m}"), a)
+        :ok = login(socket, s[:name], s[:user], s[:pass])
+        :erlang.send_after(300000, self(), :keep_alive)
+        {:ok, {socket, s, [], ""}}
+      _ ->
+        IO.puts("Could not connect to server.")
+    end
   end
 
   def handle_call(:id, _, {_, s, _} = state) do
-    {:reply, s.bot_id, state}
+    {:reply, s[:bot_id], state}
   end
 
   def handle_call(:admins, _, {_, s, _} = state) do
-    {:reply, s.admins, state}
+    {:reply, s[:admins], state}
   end
 
   def handle_call(:scripts, _, {_, s, _} = state) do
-    scripts = Enum.map(s.scripts, fn({name,_}) -> name end)
+    scripts = Enum.map(s[:scripts], fn({name,_}) -> name end)
     {:reply, scripts, state}
   end
 
@@ -236,12 +242,12 @@ defmodule Mambo.Bot do
   end
 
   def handle_cast({:send_msg, {msg, cid}}, {socket, s, watchers} = state) do
-    if cid === s.default_channel do
+    if cid === s[:default_channel] do
       cmd = "sendtextmessage targetmode=2 target=1 msg=#{Mambo.Helpers.escape(msg)}"
       send_to_server(socket, cmd)
       {:noreply, state}
     else
-      :gen_server.cast(watchers[cid], {:send_msg, msg})
+      :gen_server.cast(elem(List.keyfind(watchers, cid, 0),1), {:send_msg, msg})
       {:noreply, state}
     end
   end
@@ -256,7 +262,7 @@ defmodule Mambo.Bot do
     msg = "[b][color=#AA0000][GM] #{msg}[/color][/b]"
     cmd = "sendtextmessage targetmode=2 target=1 msg=#{Mambo.Helpers.escape(msg)}"
     Enum.each(watchers, fn({cid,pid}) ->
-      if cid === s.default_channel do
+      if cid === s[:default_channel] do
         send_to_server(socket, cmd)
       else
         :gen_server.cast(pid, {:send_msg, msg})
@@ -286,29 +292,29 @@ defmodule Mambo.Bot do
   end
 
   def handle_cast({:mute, cid}, {_, _, watchers} = state) do
-    :gen_server.cast(watchers[cid], :mute)
+    :gen_server.cast(elem(List.keyfind(watchers, cid, 0),1), :mute)
     {:noreply, state}
   end
 
   def handle_cast({:unmute, cid}, {_, _, watchers} = state) do
-    :gen_server.cast(watchers[cid], :unmute)
+    :gen_server.cast(elem(List.keyfind(watchers, cid, 0),1), :unmute)
     {:noreply, state}
   end
 
   def handle_cast({:rename, {name, cid}}, {socket, s, watchers} = state) do
-    if cid === s.default_channel do
+    if cid === s[:default_channel] do
       cmd = "clientupdate client_nickname=#{Mambo.Helpers.escape(name)}"
       send_to_server(socket, cmd)
       {:noreply, state}
     else
-      :gen_server.cast(watchers[cid], {:rename, name})
+      :gen_server.cast(elem(List.keyfind(watchers, cid, 0),1), {:rename, name})
       {:noreply, state}
     end
   end
 
   def handle_cast({:add_watcher, cid}, {socket, s, watchers}) do
     num = length(watchers) + 1
-    args = [{cid, s.bot_id, {"#{s.name}_#{num}", s.host, s.port, s.user, s.pass}}]
+    args = [{cid, s[:bot_id], {"#{s[:name]}_#{num}", s[:host], s[:port], s[:user], s[:pass]}}]
     {:ok, pid} = Mambo.WatcherSup.add_watcher(args)
     {:noreply, {socket, s, Dict.put_new(watchers, cid, pid)}}
   end
@@ -322,7 +328,8 @@ defmodule Mambo.Bot do
     {:noreply, state}
   end
 
-  def handle_info({:tcp, _, <<@notify_msg, r :: binary>>}, {_, Settings[bot_id: bid], _} = state) do
+  def handle_info({:tcp, _, <<@notify_msg, r :: binary>>}, {_, settings(bot_id: bid), _} = state) do
+    IO.puts("inside handle_info notifytextmessage: #{r}")
     {:ok, re} = Regex.compile("targetmode=([1-2]) msg=(\\S*)(?: target=\\d*)? " <>
       "invokerid=(\\d*) invokername=(.*) invokeruid=(.*)", "i")
 
@@ -365,7 +372,7 @@ defmodule Mambo.Bot do
       if String.ends_with?(channellist, "error id=0 msg=ok\n\r") do
         {ids, dc} = parse_channellist(channellist)
         watchers = add_watchers(ids, s)
-        {:noreply, {socket, s.default_channel(dc), watchers}}
+        {:noreply, {socket, List.keyreplace(s, :default_channel, 0, {:default_channel, dc}), watchers}}
       else
         {:noreply, {socket, s, [], channellist}}
       end
@@ -377,7 +384,7 @@ defmodule Mambo.Bot do
   def handle_info({:tcp, _, <<"error id=0", _ :: binary>>}, {socket, s, [], channellist}) do
     {ids, dc} = parse_channellist(channellist)
     watchers = add_watchers(ids, s)
-    {:noreply, {socket, s.default_channel(dc), watchers}}
+    {:noreply, {socket, List.keyreplace(s, :default_channel, 0, {:default_channel, dc}), watchers}}
   end
 
   # If the channellist is too long the server query will answer in chuncks, this
@@ -388,7 +395,7 @@ defmodule Mambo.Bot do
     if String.ends_with?(data, "error id=0 msg=ok\n\r") do
       {ids, dc} = parse_channellist(channellist <> data)
       watchers = add_watchers(ids, s)
-      {:noreply, {socket, s.default_channel(dc), watchers}}
+      {:noreply, {socket, List.keyreplace(s, :default_channel, 0, {:default_channel, dc}), watchers}}
     else
       {:noreply, {socket, s, [], channellist <> data}}
     end

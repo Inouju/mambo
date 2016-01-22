@@ -7,7 +7,7 @@ defmodule Youtube do
     .youtube <phrase>
   """
 
-  use GenEvent.Behaviour
+  use GenEvent
 
   def init(key) do
     {:ok, key}
@@ -53,20 +53,18 @@ defmodule Youtube do
   defp youtube(query, key, answer) do
     url = "https://www.googleapis.com/youtube/v3/search?" <>
       URI.encode_query([q: query, key: key, part: "id"])
-
     case :hackney.get(url, [], <<>>, []) do
     {:ok, 200, _, client} ->
       {:ok, body} = :hackney.body(client)
-      case :jsx.decode(body)["items"] do
+      case :jsx.decode(body, [{:labels, :atom}])[:items] do
         [] ->
           answer.("[b]YouTube:[/b] No result.")
         videos ->
-          case Enum.find(videos, fn(v) -> v["id"]["kind"] == "youtube#video" end) do
+          case Enum.find(videos, fn(v) -> v[:id][:kind] == "youtube#video" end) do
             nil ->
               answer.("[b]YouTube:[/b] No result.")
             video ->
-              v_url = "https://www.youtube.com/watch?v=#{video["id"]["videoId"]}"
-              spawn(Title, :get_title, [v_url, answer])
+              v_url = "https://www.youtube.com/watch?v=#{video[:id][:videoId]}"
               answer.("[b]YouTube:[/b] #{Mambo.Helpers.format_url(v_url)}")
           end
       end

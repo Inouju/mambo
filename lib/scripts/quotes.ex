@@ -11,7 +11,7 @@ defmodule Quotes do
     .quote
   """
 
-  use GenEvent.Behaviour
+  use GenEvent
 
   def init(_) do
     {:ok, Mambo.Brain.quotes_max()}

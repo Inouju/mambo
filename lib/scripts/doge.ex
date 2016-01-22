@@ -9,11 +9,11 @@ defmodule Doge do
 
   @time_fmt "~4.10.0B-~2.10.0B-~2.10.0B ~2.10.0B:~2.10.0B:~2.10.0B"
 
-  @url_doge_btc "http://dogechain.info/chain/Dogecoin/q/last_price"
+  @url_doge_btc "http://data.bter.com/api/1/ticker/doge_btc"
   @url_btc_usd  "https://coinbase.com/api/v1/prices/sell"
-  @url_usd_eur  "http://rate-exchange.appspot.com/currency?from=USD&to=EUR"
+  @url_usd_eur  "http://api.fixer.io/latest?base=USD"
 
-  use GenEvent.Behaviour
+  use GenEvent
 
   def init(_) do
     prices = update_prices({{{1970,1,1},{0,0,0}},nil})
@@ -159,7 +159,7 @@ defmodule Doge do
     case :hackney.get(@url_doge_btc, [], <<>>, []) do
       {:ok, 200, _, client} ->
         {:ok, body} = :hackney.body(client)
-        rate = :jsx.decode(body)["avg"]
+        rate = :jsx.decode(body, [{:labels, :atom}])[:avg]
         send(pid, {:ok, ref, {:doge_btc, bin_to_num(rate)}})
       _ ->
         send(pid, {:ok, ref, {:doge_btc, 0}})
@@ -170,7 +170,7 @@ defmodule Doge do
     case :hackney.get(@url_btc_usd, [], <<>>, []) do
       {:ok, 200, _, client} ->
         {:ok, body} = :hackney.body(client)
-        rate = :jsx.decode(body)["amount"]
+        rate = :jsx.decode(body, [{:labels, :atom}])[:amount]
         send(pid, {:ok, ref, {:btc_usd, bin_to_num(rate)}})
       _ ->
         send(pid, {:ok, ref, {:btc_usd, 0}})
@@ -181,7 +181,7 @@ defmodule Doge do
     case :hackney.get(@url_usd_eur, [], <<>>, []) do
       {:ok, 200, _, client} ->
         {:ok, body} = :hackney.body(client)
-        rate = :jsx.decode(body)["rate"]
+        rate = :jsx.decode(body, [{:labels, :atom}])[:rates][:EUR]
         send(pid, {:ok, ref, {:usd_eur, rate}})
       _ ->
         send(pid, {:ok, ref, {:usd_eur, 0}})
@@ -196,7 +196,7 @@ defmodule Doge do
   end
 
   defp to_currency(num, opts) do
-    num = float_to_list(num, opts)
+    num = Float.to_char_list(num, opts)
     partition(num)
   end
 

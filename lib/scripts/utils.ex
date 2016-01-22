@@ -10,7 +10,7 @@ defmodule Utils do
     .version
   """
 
-  use GenEvent.Behaviour
+  use GenEvent
 
   @days {'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'}
   @months {'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep',
@@ -92,7 +92,7 @@ defmodule Utils do
     month = elem(@months, month_num - 1)
     :io_lib.format('~s ~s ~B ~2..0B:~2..0B:~2..0B ~B', [wday, month, day, h, m, s, year])
     |> List.flatten
-    |> String.from_char_list!
+    |> List.to_string
   end
 
   defp uptime() do
@@ -105,6 +105,6 @@ defmodule Utils do
     if Enum.all?(:application.which_applications(), fn({a,_,_}) -> a != :mix end) do
       Mix.loadpaths()
     end
-    "Mambo - #{Mix.project()[:version]}"
+    "Mambo - #{Mix.Project.config[:version]}"
   end
 end

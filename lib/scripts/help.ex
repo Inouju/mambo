@@ -6,7 +6,7 @@ defmodule Help do
     .help
   """
 
-  use GenEvent.Behaviour
+  use GenEvent
 
   @helpmsg """
 
@@ -17,27 +17,28 @@ defmodule Help do
   """
 
   @options [
-    {Elixir.Admin, "admin"},
-    {Elixir.Benis, "benis"},
-    {Elixir.Brainfuck, "brainfuck"},
-    {Elixir.Cannedreplies, "replies"},
-    {Elixir.Eightball, "8ball"},
-    {Elixir.Gif, "gif"},
-    {Elixir.Google, "google"},
-    {Elixir.Lastfm, "np"},
-    {Elixir.Private, "private"},
-    {Elixir.Quotes, "quote"},
-    {Elixir.Rainbow, "rainbow"},
-    {Elixir.Random, "random"},
-    {Elixir.Sux, "sux"},
-    {Elixir.Title, "title"},
-    {Elixir.Translate, "translate"},
-    {Elixir.Twitter, "twitter"},
-    {Elixir.Urban, "urban"},
-    {Elixir.Utils, "utils"},
-    {Elixir.Whatthecommit, "wtc"},
-    {Elixir.Wolframalpha, "wolframalpha"},
-    {Elixir.Youtube, "youtube"}
+    {:Admin, "admin"},
+    {:Benis, "benis"},
+    {:Brainfuck, "brainfuck"},
+    {:Cannedreplies, "replies"},
+    {:Doge, "doge"},
+    {:Eightball, "8ball"},
+    {:Gif, "gif"},
+    {:Google, "google"},
+    {:Lastfm, "np"},
+    {:Private, "private"},
+    {:Quotes, "quote"},
+    {:Rainbow, "rainbow"},
+    {:Random, "random"},
+    {:Sux, "sux"},
+    {:Title, "title"},
+    {:Translate, "translate"},
+    {:Twitter, "twitter"},
+    {:Urban, "urban"},
+    {:Utils, "utils"},
+    {:Whatthecommit, "wtc"},
+    {:Wolframalpha, "wolframalpha"},
+    {:Youtube, "youtube"}
   ]
 
   def init(_) do
@@ -52,6 +53,7 @@ defmodule Help do
   end
 
   def handle_event({:privmsg, {".help", _, {clid,_}}}, _) do
+    IO.puts("Got to help.ex priv msg")
     options = Enum.map(Mambo.Bot.scripts(), &(@options[&1]))
       |> Enum.filter(&(&1 != nil))
     Mambo.Bot.send_privmsg("#{@helpmsg}#{Enum.join(options, " [b]|[/b] ")}", clid)

@@ -8,7 +8,7 @@ defmodule Wolframalpha do
     .convert <expression> to <units>
   """
 
-  use GenEvent.Behaviour
+  use GenEvent
 
   def init(key) do
     {:ok, key}

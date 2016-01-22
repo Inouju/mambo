@@ -3,11 +3,13 @@ defmodule Translate do
   Mambo is a polyglot, he will translate anything for you.
 
   Examples:
-    .translate <phrase>
+    .translate <non-english phrase>
     .translate <input language> <target language> <phrase>
+    .tl <non-english phrase>
+    .tl <input language> <target language> <phrase>
   """
 
-  use GenEvent.Behaviour
+  use GenEvent
 
   @languages [
     {"af", "afrikaans"},
@@ -135,7 +137,7 @@ defmodule Translate do
   # Helpers
 
   defp get_code(lang) do
-    unless ListDict.has_key?(@languages, lang) do
+    unless List.keymember?(@languages, lang, 0) do
       Enum.reduce(@languages, "en", fn({k,v}, acc) ->
         if String.downcase(v) == String.downcase(lang), do: k, else: acc
       end)
@@ -149,15 +151,14 @@ defmodule Translate do
       URI.encode_query([client: "p", oe: "UTF-8", ie: "UTF-8", hl: "en",
         multires: 1, sc: 1, sl: sl, ssel: 0, tl: tl, tsel: 0, uptl: "en",
         text: exp])
-
     case :hackney.get(url, [], <<>>, []) do
       {:ok, 200, _, client} ->
         {:ok, body} = :hackney.body(client)
-        data = :jsx.decode(body)
-        ilang = @languages[data["src"]]
-        tlang = @languages[tl]
-        sentences = hd(data["sentences"])
-        trans = sentences["trans"]
+        data = :jsx.decode(body, [{:labels, :atom}])
+        ilang = elem(List.keyfind(@languages, data[:src], 0), 1)
+        tlang = elem(List.keyfind(@languages, tl, 0), 1)
+        sentences = hd(data[:sentences])
+        trans = sentences[:trans]
 
         if sl == "auto" do
           answer.("[b]#{exp}[/b] is #{ilang} for [b]#{trans}[/b].")

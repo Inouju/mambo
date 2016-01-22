@@ -6,7 +6,7 @@ defmodule Eightball do
     .8ball <question>
   """
 
-  use GenEvent.Behaviour
+  use GenEvent
 
    @options ["It is certain.", "It is decidedly so.", "Without a doubt.",
      "Yes, definitely.", "You may rely on it.", "As I see it, yes.",
@@ -47,6 +47,7 @@ defmodule Eightball do
   # Helpers
 
   defp shake() do
-    Enum.at(@options, :random.uniform(Enum.count(@options)) - 1)
+    :random.seed(:os.timestamp)
+    Enum.random(@options)
   end
 end

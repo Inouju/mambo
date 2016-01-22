@@ -7,7 +7,7 @@ defmodule Title do
     http://elixir-lang.org/
   """
 
-  use GenEvent.Behaviour
+  use GenEvent
 
   def init(_) do
     {:ok, []}
@@ -60,12 +60,13 @@ defmodule Title do
                {"Cookie", "locale=en_US; path=/; domain=.facebook.com"}]
     case :hackney.get(url, headers, <<>>, [{:follow_redirect, true}]) do
       {:ok, 200, headers, client} ->
-        case parse_content_type(headers["Content-Type"]) do
+        headers = for {m, a} <- headers, do: {String.to_atom(m),a}
+        case parse_content_type(headers[:"Content-Type"]) do
           {:ok, "text/html"} ->
-            {:ok, body} = :hackney.body(client, 5000)
+            {:ok, body} = :hackney.body(client, 10000)
             find_title(body, answer)
           {:ok, {"text/html", :latin1}} ->
-            {:ok, body} = :hackney.body(client, 5000)
+            {:ok, body} = :hackney.body(client, 10000)
             find_title(:unicode.characters_to_binary(body, :latin1), answer)
           {:ok, other} ->
             answer.("[b]Content Type:[/b] #{other}")

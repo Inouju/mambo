@@ -9,7 +9,7 @@ defmodule Gif do
     .gif <gif_link>
   """
 
-  use GenEvent.Behaviour
+  use GenEvent
 
   def init(_) do
     {:ok, []}
@@ -80,10 +80,10 @@ defmodule Gif do
   defp download_gif(url) do
     temp_dir = "tmp/#{:erlang.phash2(make_ref())}"
     File.mkdir_p!(temp_dir)
-
     case :hackney.get(url, [], <<>>, []) do
       {:ok, 200, headers, client} ->
-        if headers["Content-Type"] == "image/gif" do
+        headers = for {m, a} <- headers, do: {String.to_atom(m),a}
+        if headers[:"Content-Type"] == "image/gif" do
           {:ok, bin} = :hackney.body(client)
           path = Path.join([temp_dir, "original.gif"])
           File.write!(path, bin)
@@ -105,8 +105,8 @@ defmodule Gif do
       {w,h} when w > 290 and w <= 300 and h <= 300 -> :right_size
       {w,h} when h > 290 and h <= 300 and w <= 300 -> :right_size
       _ ->
-        System.cmd("convert #{gif} -coalesce #{tmp}")
-        System.cmd("convert #{tmp} -resize 300x300 #{out}")
+        System.cmd("convert", ["#{gif} -coalesce #{tmp}"])
+        System.cmd("convert", ["#{tmp} -resize 300x300 #{out}"])
         if File.exists?(out), do: {:ok, out}, else: :error
     end
   end
@@ -117,7 +117,7 @@ defmodule Gif do
     case :hackney.post(url, [], {:multipart, [{:file,path}]}, []) do
       {:ok, status, _, client} when status in [200,409] ->
         {:ok, body} = :hackney.body(client)
-        hash = :jsx.decode(body)["hash"]
+        hash = :jsx.decode(body, [{:labels, :atom}])[:hash]
         {:ok, [{"gif","https://mediacru.sh/#{hash}.gif"}]}
       _ ->
         :error
@@ -129,7 +129,7 @@ defmodule Gif do
     case :hackney.post(url, [], {:form, [{"url",gifurl}]}, []) do
       {:ok, status, _, client} when status in [200,409] ->
         {:ok, body} = :hackney.body(client)
-        hash = :jsx.decode(body)["hash"]
+        hash = :jsx.decode(body, [{:labels, :atom}])[:hash]
         urls = Enum.map(["gif","mp4","ogv","webm"], fn(ext) ->
           {ext,"https://mediacru.sh/#{hash}.#{ext}"}
         end)
@@ -162,8 +162,8 @@ defmodule Gif do
   defp get_size(gif) do
     bin = File.read!(gif)
     <<?G,?I,?F,?8,_,?a,
-      w :: [little, size(16)],
-      h :: [little, size(16)],
+      w :: little - size(16),
+      h :: little - size(16),
       _ :: binary>> = bin
     {w,h}
   end

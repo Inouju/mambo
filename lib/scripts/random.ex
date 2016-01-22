@@ -9,7 +9,7 @@ defmodule Random do
     .scissors
   """
 
-  use GenEvent.Behaviour
+  use GenEvent
 
   def init(_) do
     {:ok, []}
@@ -72,8 +72,8 @@ defmodule Random do
   # Helpers
 
   defp roll() do
-    :random.seed(:erlang.now())
-    integer_to_binary(:random.uniform(100))
+    :random.seed(:os.timestamp())
+    Integer.to_string(:random.uniform(100))
   end
 
   defp rps(p1, p2) do
@@ -95,7 +95,7 @@ defmodule Random do
   end
 
   defp attack() do
-    :random.seed(:erlang.now())
+    :random.seed(:erlang.timestamp())
     Enum.at(["rock", "paper", "scissors"], :random.uniform(3) - 1)
   end
 end

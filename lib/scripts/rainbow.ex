@@ -7,7 +7,7 @@ defmodule Rainbow do
     .rainbow <phrase>
   """
 
-  use GenEvent.Behaviour
+  use GenEvent
 
   @colors ["#FF0000",
            "#FF8000",

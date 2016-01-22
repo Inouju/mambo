@@ -56,7 +56,7 @@ defmodule Mambo.Brain do
   end
 
   def get_random_quote() do
-    :random.seed(:erlang.now())
+    :random.seed(:erlang.timestamp())
     case :mnesia.dirty_all_keys(:mquotes) do
       [] -> :no_quotes
       ids ->

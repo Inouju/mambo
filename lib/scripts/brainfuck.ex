@@ -6,9 +6,9 @@ defmodule Brainfuck do
     .bf ++++++++++[>++++++++>++++++<<-]>---.>+++++.<.>+.<++.
   """
 
-  use GenEvent.Behaviour
+  use GenEvent
 
-  @tape <<0 :: [size(30000), unit(8)]>>
+  @tape <<0 :: size(30000) - unit(8)>>
     @data_pointer 0
 
   def init(_) do
@@ -58,12 +58,12 @@ defmodule Brainfuck do
   end
 
   defp parse(<< ?+, ins :: binary>>, dpointer, tape, out) do
-    <<prev :: [binary, size(dpointer)], x :: integer, next :: binary>> = tape
+    <<prev :: binary - size(dpointer), x :: integer, next :: binary>> = tape
     parse(ins, dpointer, <<prev :: binary, (x + 1) :: integer, next :: binary>>, out)
   end
 
   defp parse(<< ?-, ins :: binary>>, dpointer, tape, out) do
-    <<prev :: [binary, size(dpointer)], x :: integer, next :: binary>> = tape
+    <<prev :: binary - size(dpointer), x :: integer, next :: binary>> = tape
     parse(ins, dpointer, <<prev :: binary, (x - 1) :: integer, next :: binary>>, out)
   end
 
@@ -73,16 +73,15 @@ defmodule Brainfuck do
   end
 
   defp parse(<< ?., ins :: binary>>, dpointer, tape, out) do
-    <<_ :: [binary, size(dpointer)], x :: integer, _ :: binary>> = tape
+    <<_ :: binary - size(dpointer), x :: integer, _ :: binary>> = tape
     parse(ins, dpointer, tape, [<<x>> | out])
   end
 
   defp parse(<< ?[, ins :: binary>>, dpointer, tape, out) do
     match = find_matching(ins)
-    <<bf_loop :: [binary, size(match)], next :: binary>> = ins
+    <<bf_loop :: binary - size(match), next :: binary>> = ins
 
-    <<_ :: [binary, size(dpointer)], x :: integer, _ :: binary>> = tape
-
+    <<_ :: binary - size(dpointer), x :: integer, _:: binary>> = tape
     if x === 0 do
       parse(next, dpointer, tape, out)
     else

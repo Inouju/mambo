@@ -3,7 +3,7 @@ defmodule Mambo do
   Entry point of the bot.
   """
 
-  use Application.Behaviour
+  use Application
 
   @doc """
   Starts the bot application.

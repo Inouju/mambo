@@ -7,7 +7,7 @@ defmodule Urban do
     .urban <term>
   """
 
-  use GenEvent.Behaviour
+  use GenEvent
 
   def init(_) do
     {:ok, []}
@@ -55,9 +55,9 @@ defmodule Urban do
     case :hackney.get(url, [], <<>>, []) do
       {:ok, 200, _, client} ->
         {:ok, body} = :hackney.body(client)
-        case :jsx.decode(body)["list"] do
+        case :jsx.decode(body, [{:labels, :atom}])[:list] do
           [first|_] ->
-            answer.("[b]Urban Dictionary:[/b] #{format(first["definition"])}.")
+            answer.("[b]Urban Dictionary:[/b] #{format(first[:definition])}.")
           [] ->
             answer.("[b]Urban Dictionary:[/b] No result.")
         end

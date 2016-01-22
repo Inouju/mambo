@@ -3,7 +3,9 @@ defmodule Mambo.Helpers do
   Contains helper functions used by various Mambo modules.
   """
 
-  @entities HashDict.new [
+  require Mambo.Bot
+
+  @entities Map.new [
     {"quot",?"}, {"amp",?&}, {"apos",?'}, {"lt",?<}, {"gt",?>},
     {"nbsp",? }, {"iexcl",?¡}, {"cent",?¢}, {"pound",?£}, {"curren",?¤},
     {"yen",?¥}, {"brvbar",?¦}, {"sect",?§}, {"uml",?¨}, {"copy",?©},
@@ -61,28 +63,27 @@ defmodule Mambo.Helpers do
   @doc """
   Reads the settings file. Returns a `Mambo.Bot.Settings` record.
   """
-  @spec get_settings() :: Mambo.Bot.Settings[name: String.t, user: String.t, pass: String.t,
+  @spec get_settings() :: Mambo.Bot.settings(name: String.t, user: String.t, pass: String.t,
     host: String.t, port: integer, bot_id: String.t, admins: [String.t],
-    channels: String.t | [String.t], scripts: [{atom, [term]}]]
+    channels: String.t | [String.t], scripts: [{atom, [term]}])
   def get_settings() do
     {:ok, data} = File.read("settings.json")
 
-    s = :jsx.decode(data)
-    p = Enum.map(s["scripts"], fn([{_,name}, {_,args}]) ->
-                                 {binary_to_atom("Elixir." <> name),args}
+    s = :jsx.decode(data, [{:labels, :atom}])
+    p = Enum.map(s[:scripts], fn([{_,name}, {_,args}]) ->
+                                 {String.to_atom(name),args}
                                end)
-
-    Mambo.Bot.Settings[
-      name: s["name"],
-      user: s["user"],
-      pass: s["pass"],
-      host: s["host"],
-      port: s["port"],
-      bot_id: s["bot_id"],
-      admins: s["admins"],
-      channels: s["channels"],
+    Mambo.Bot.settings(
+      name: s[:name],
+      user: s[:user],
+      pass: s[:pass],
+      host: s[:host],
+      port: s[:port],
+      bot_id: s[:bot_id],
+      admins: s[:admins],
+      channels: s[:channels],
       scripts: p
-    ]
+    )
   end
 
   @doc """
@@ -93,7 +94,7 @@ defmodule Mambo.Helpers do
     escape(s, [])
   end
 
-  defp escape("", es), do: Enum.reverse(es) |> String.from_char_list!
+  defp escape("", es), do: Enum.reverse(es) |> List.to_string
   defp escape(<<?\\, r :: binary>>, es), do: escape(r, ["\\\\" | es])
   defp escape(<<?/,  r :: binary>>, es), do: escape(r, ["\\/"  | es])
   defp escape(<<? ,  r :: binary>>, es), do: escape(r, ["\\s"  | es])
@@ -115,7 +116,7 @@ defmodule Mambo.Helpers do
     unescape(s, [])
   end
 
-  defp unescape("", es), do: Enum.reverse(es) |> String.from_char_list!
+  defp unescape("", es), do: Enum.reverse(es) |> List.to_string
   defp unescape(<<"\\\\", r :: binary>>, es), do: unescape(r, [?\\ | es])
   defp unescape(<<"\\/",  r :: binary>>, es), do: unescape(r, [?/  | es])
   defp unescape(<<"\\s",  r :: binary>>, es), do: unescape(r, [?   | es])
@@ -143,7 +144,7 @@ defmodule Mambo.Helpers do
   end
 
   defp r_entities([], rest, _, acc) do
-    String.from_char_list!(Enum.reverse(acc)) <> rest
+    List.to_string(Enum.reverse(acc)) <> rest
   end
 
   defp r_entities([[{count, len}] | t], <<?&, r :: binary>>, count, acc) do
@@ -152,16 +153,16 @@ defmodule Mambo.Helpers do
   end
 
   defp r_entities(l, <<char :: utf8, rest :: binary>>, count, acc) do
-    r_entities(l, rest, count + size(<<char :: utf8>>), [char | acc])
+    r_entities(l, rest, count + byte_size(<<char :: utf8>>), [char | acc])
   end
 
   defp get_replacement(len, s) do
-    <<e :: [size(len), binary], ?;, r :: binary>> = s
+    <<e :: size(len)-binary, ?;,r :: binary>> = s
     case @entities[e] do
     nil ->
       case e do
         <<?#, num :: binary>> ->
-          {binary_to_integer(num), r}
+          {String.to_integer(num), r}
         _ ->
           {<<?&, e :: binary, ?;>>, r}
       end

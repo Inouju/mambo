@@ -10,7 +10,7 @@ defmodule Google do
     .images <phrase>
   """
 
-  use GenEvent.Behaviour
+  use GenEvent
 
   def init(_) do
     {:ok, []}
@@ -63,10 +63,9 @@ defmodule Google do
     case :hackney.get(url, [], <<>>, []) do
       {:ok, 200, _, client} ->
         {:ok, body} = :hackney.body(client)
-        case :jsx.decode(body)["responseData"]["results"] do
+        case :jsx.decode(body, [{:labels, :atom}])[:responseData][:results] do
           [r | _] ->
-            result = r["unescapedUrl"]
-            spawn(Title, :get_title, [result, answer])
+            result = r[:unescapedUrl]
             answer.("[b]Google:[/b] #{Mambo.Helpers.format_url(result)}")
           [] ->
             answer.("[b]Google:[/b] No result.")

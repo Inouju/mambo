@@ -9,7 +9,7 @@ defmodule Admin do
     .rename <name>
   """
 
-  use GenEvent.Behaviour
+  use GenEvent
 
   def init(_) do
     {:ok, []}

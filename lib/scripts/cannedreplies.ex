@@ -12,9 +12,9 @@ defmodule Cannedreplies do
     chownface
   """
 
-  use GenEvent.Behaviour
+  use GenEvent
 
-  @responses [{"gface", "( ≖‿≖)"},
+  @responses Map.new [{"gface", "( ≖‿≖)"},
               {"cool", "COOL LIKE SNOWMAN ☃"},
               {"chownface", "( ´· ‿ ·`)"},
               {"goface", "ʕ ◔ϖ◔ʔ"},
@@ -39,7 +39,7 @@ defmodule Cannedreplies do
   end
 
   def handle_event({:msg, {msg, _, {cid,_,_}}}, _) do
-    case ListDict.get(@responses, msg) do
+    case Map.get(@responses, msg) do
       nil ->
         {:ok, []}
       reply ->
