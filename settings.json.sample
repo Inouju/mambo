@@ -26,6 +26,7 @@
     {"name": "Cannedreplies", "args": []},
     {"name": "Whatthecommit", "args": []},
     {"name": "Gif", "args": []},
+    {"name": "Doge", "args": []},
     {"name": "Lastfm", "args": "LASTFM API KEY HERE"},
     {"name": "Youtube", "args": "YOUTUBE API KEY HERE"},
     {"name": "Wolframalpha", "args": "WOLFRAMALPHA API KEY HERE"},
