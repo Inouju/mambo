@@ -23,31 +23,10 @@ Some plugins require access to certain APIs:
 Use the above links to register an account and get your API credentials. If you
 don't plan to use the above plugins you can skip this.
 
-### Settings
-
-Once you have sorted the dependencies you can start configuring the bot. Everything
-related to configuration is done in the `settings.json` file.
-
-#### `settings.json`
-
-* `name`: Nickname that will appear in the chat
-* `user`: Server query username
-* `pass`: Server query password
-* `host`: Server ip address
-* `port`: Server query port
-* `bot_id`: Bot unique id, it's important that this value is right or the bot will not work properly
-* `admins`: List of admins unique id, required if you plan to use the `admin.ex` script
-* `channels`: List of the channels the bot will join, this can be either a list of channel ids or the string "all" to join all the channels
-* `scripts`: List of scripts that the bot will use, put only the scripts you want to use
-
-Use the file [`settings.sample.json`](https://raw.github.com/inouju/mambo/master/settings.json.sample) as a guide, edit the values that you don't like,
-remove the scripts you don't want to use from the list and when you're happy
-rename it to `settings.json`.
-
 ### Compile and run
 
 When you have a working installation of elixir and the bot is properly configured,
-download the [source code](https://github.com/inouju/mambo/archive/master.zip) and extract it to a directory of your choosing.
+download the [source code](https://github.com/Inouju/mambo/releases) and extract it to a directory of your choosing.
 Open a terminal window and do the following:
 
 ```sh
@@ -76,6 +55,27 @@ for more info). In Linux (and Mac OS X too I guess) you can use [tmux](http://tm
 or [screen](https://www.gnu.org/software/screen/) to keep the shell running.
 I don't know about Windows, google is your friend here.
 
+### Settings
+
+Once you have sorted the dependencies you can start configuring the bot. Everything
+related to configuration is done in the `settings.json` file.
+
+#### `settings.json`
+
+* `name`: Nickname that will appear in the chat
+* `user`: Server query username
+* `pass`: Server query password
+* `host`: Server ip address
+* `port`: Server query port
+* `bot_id`: Bot unique id, it's important that this value is right or the bot will not work properly
+* `admins`: List of admins unique id, required if you plan to use the `admin.ex` script
+* `channels`: List of the channels the bot will join, this can be either a list of channel ids or the string "all" to join all the channels
+* `scripts`: List of scripts that the bot will use, put only the scripts you want to use
+
+Use the file [`settings.sample.json`](https://raw.github.com/inouju/mambo/master/settings.json.sample) as a guide, edit the values that you don't like,
+remove the scripts you don't want to use from the list and when you're happy
+rename it to `settings.json`.
+
 ## Scripts
 
 Mambo by itself doesn't do much, but don't worry, it's extensible via scripting, you can add
@@ -91,6 +91,7 @@ Here's the full list of provided scripts:
 | [`benis.ex`](https://github.com/inouju/mambo/blob/master/lib/scripts/benis.ex#L2-L7) | `.benis <expression>` |
 | [`brainfuck.ex`](https://github.com/inouju/mambo/blob/master/lib/scripts/brainfuck.ex#L2-L7) | `.bf <brainfuck_expression>` |
 | [`cannedreplies.ex`](https://github.com/inouju/mambo/blob/master/lib/scripts/cannedreplies.ex#L2-L13) | `cool`,`gface`,`goface`,`edgyface`,`dface`,`ggface`,`chownface` |
+| [`doge.ex`](https://github.com/Inouju/mambo/blob/master/lib/scripts/doge.ex) | `.doge`, `.doge <amount>` |
 | [`eightball.ex`](https://github.com/inouju/mambo/blob/master/lib/scripts/eightball.ex#L2-L7) | `.8ball <question>` |
 | [`gif.ex`](https://github.com/inouju/mambo/blob/master/lib/scripts/gif.ex#L2-L10) | `.gif <gif_link>` |
 | [`google.ex`](https://github.com/inouju/mambo/blob/master/lib/scripts/google.ex#L2-L11) | `.g <phrase>`,`.google <phrase>`,`.img <phrase>`,`.image <phrase>`,`.images <phrase>` |
