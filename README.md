@@ -9,10 +9,10 @@ This project was originally written by MrShankly, and is being updated by Inouju
 ## Getting Started
 
 ### Requirements
-* Erlang (18.0 or later) - there are pre built packages in the [Erlang Solutions Downloads page](https://www.erlang-solutions.com/downloads/download-erlang-otp)
+* Erlang (18.0 or later) - there are pre built packages in the [Erlang Solutions Downloads page](http://www.erlang.org/downloads)
 * Elixir 1.2
 * Server query login credentials
-* The script `gif.ex` also requires [ImageMagick](http://www.imagemagick.org/script/index.php) to be installed.
+* The script `gif.ex` also requires [ImageMagick](http://www.imagemagick.org/script/binary-releases.php) to be installed.
 
 Some plugins require access to certain APIs:
 * [Twitter](https://dev.twitter.com/) for `twitter.ex`
@@ -51,7 +51,7 @@ $ iex -S mix
 
 I recommend running the bot with an elixir shell, this way you can have some
 feedback and easily manage the bot without turning it off (see [Managing the bot](https://github.com/inouju/mambo#managing-the-bot)
-for more info). In Linux (and Mac OS X too I guess) you can use [tmux](http://tmux.sourceforge.net/)
+for more info). In Linux (and Mac OS X too I guess) you can use [tmux](https://tmux.github.io/)
 or [screen](https://www.gnu.org/software/screen/) to keep the shell running.
 I don't know about Windows, google is your friend here.
 
@@ -114,7 +114,7 @@ Here's the full list of provided scripts:
 ### Scripting
 
 Scripts can either be written in elixir or erlang, they all are gen_event handlers, see [[1]](http://www.erlang.org/doc/man/gen_event.html)
-and [[2]](http://elixir-lang.org/docs/master/) for more info. Look at already written scripts to
+and [[2]](http://elixir-lang.org/docs.html#master) for more info. Look at already written scripts to
 know how to write your own.
 
 Once you have written your script place it in the `lib/scripts` folder and add it to the `scripts` list in
