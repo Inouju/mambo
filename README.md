@@ -69,7 +69,7 @@ related to configuration is done in the `settings.json` file.
 * `port`: Server query port
 * `bot_id`: Bot unique id, it's important that this value is right or the bot will not work properly
 * `admins`: List of admins unique id, required if you plan to use the `admin.ex` script
-* `channels`: List of the channels the bot will join, this can be either a list of channel ids or the string "all" to join all the channels
+* `channels`: List of the channels the bot will join, this can be either a list of channel ids such as [1, 12, 24] or "all" to join all the channels
 * `scripts`: List of scripts that the bot will use, put only the scripts you want to use
 
 Use the file [`settings.sample.json`](https://raw.github.com/inouju/mambo/master/settings.json.sample) as a guide, edit the values that you don't like,
@@ -199,7 +199,7 @@ new plugins.
 ## Getting help
 
 You can get help by [making an issue](https://github.com/inouju/mambo/issues) on GitHub, or going
-to the [official thread](http://forum.teamspeak.com/showthread.php/93066-Chat-bot-Mambo-IRC-style-bot-for-teamspeak-3)
+to the [official thread](http://forum.teamspeak.com/threads/122775-Updated-Chat-bot-Mambo-IRC-style-bot-for-Teamspeak-3)
 in the teamspeak forums. If you are already knowledgable about Mambo, please
 consider contributing for the sake of others.
 
