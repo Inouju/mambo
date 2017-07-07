@@ -1,13 +1,14 @@
 defmodule Quotes do
-  @moduledoc """
+ @moduledoc """
   Quotes script.
 
   Examples
     .quote add <phrase>
     .quote find <query>
     .quote edit <id>
-    .quote rm <id>
+    .quote rm <id>      Warning! Potentially dangerous. Consider edit instead.
     .quote <id>
+    .quote latest
     .quote
   """
 
@@ -56,7 +57,7 @@ defmodule Quotes do
 
   def handle_event({:msg, {<<".quote edit ", msg :: binary>>, _, {cid,_,_}}}, max) do
     answer = fn(x) -> Mambo.Bot.send_msg(x, cid) end
-    case String.split(msg, " ", global: false) do
+    case String.split(msg, " ", parts: 2) do
       [num, content] ->
         spawn(fn -> edit_quote(num, content, answer) end)
         {:ok, max}
@@ -64,6 +65,12 @@ defmodule Quotes do
         answer.("u wot m8")
         {:ok, max}
     end
+  end
+
+  def handle_event({:msg, {".quote latest", _, {cid,_,_}}}, max) do
+    answer = fn(x) -> Mambo.Bot.send_msg(x, cid) end
+    spawn(fn -> get_latest_quote(answer) end)
+    {:ok, max}
   end
 
   def handle_event({:msg, {<<".quote rm ", num :: binary>>, _, {cid,_,_}}}, max) do
@@ -160,6 +167,17 @@ defmodule Quotes do
     end
   end
 
+  defp get_latest_quote(answer) do
+    case Mambo.Brain.get_latest_quote() do
+      {id, content} ->
+        answer.("[b]Quote #{id}:[/b] #{content}")
+      :no_quotes ->
+        answer.("No quotes found.")
+      :not_found ->
+        answer.("Quote not found.")
+    end
+  end
+
   defp get_random_quote(answer) do
     case Mambo.Brain.get_random_quote() do
       {id, content} ->
@@ -171,3 +189,4 @@ defmodule Quotes do
     end
   end
 end
+
