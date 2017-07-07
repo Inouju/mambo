@@ -28,8 +28,18 @@ defmodule Cannedreplies do
     {:ok, []}
   end
 
+  def handle_event({:msg, {".help cannedreplies", _, {cid,_,_}}}, _) do
+    Mambo.Bot.send_msg(<<?\n, @moduledoc>>, cid)
+    {:ok, []}
+  end
+
   def handle_event({:msg, {".help replies", _, {cid,_,_}}}, _) do
     Mambo.Bot.send_msg(<<?\n, @moduledoc>>, cid)
+    {:ok, []}
+  end
+
+  def handle_event({:privmsg, {".help cannedreplies", _, {clid,_}}}, _) do
+    Mambo.Bot.send_privmsg(<<?\n, @moduledoc>>, clid)
     {:ok, []}
   end
 

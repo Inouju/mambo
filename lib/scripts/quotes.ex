@@ -17,8 +17,18 @@ defmodule Quotes do
     {:ok, Mambo.Brain.quotes_max()}
   end
 
+  def handle_event({:msg, {".help quotes", _, {cid,_,_}}}, max) do
+    Mambo.Bot.send_msg(<<?\n, @moduledoc>>, cid)
+    {:ok, max}
+  end
+
   def handle_event({:msg, {".help quote", _, {cid,_,_}}}, max) do
     Mambo.Bot.send_msg(<<?\n, @moduledoc>>, cid)
+    {:ok, max}
+  end
+
+  def handle_event({:privmsg, {".help quotes", _, {clid,_}}}, max) do
+    Mambo.Bot.send_privmsg(<<?\n, @moduledoc>>, clid)
     {:ok, max}
   end
 

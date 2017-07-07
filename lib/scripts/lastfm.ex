@@ -14,8 +14,18 @@ defmodule Lastfm do
     {:ok, apikey}
   end
 
+  def handle_event({:msg, {".help lastfm", _, {cid,_,_}}}, k) do
+    Mambo.Bot.send_msg(<<?\n, @moduledoc>>, cid)
+    {:ok, k}
+  end
+
   def handle_event({:msg, {".help np", _, {cid,_,_}}}, k) do
     Mambo.Bot.send_msg(<<?\n, @moduledoc>>, cid)
+    {:ok, k}
+  end
+
+  def handle_event({:privmsg, {".help lastfm", _, {clid,_}}}, k) do
+    Mambo.Bot.send_privmsg(<<?\n, @moduledoc>>, clid)
     {:ok, k}
   end
 

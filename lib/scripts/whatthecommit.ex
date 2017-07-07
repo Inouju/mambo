@@ -12,8 +12,18 @@ defmodule Whatthecommit do
     {:ok, []}
   end
 
+  def handle_event({:msg, {".help whatthecommit", _, {cid,_,_}}}, _) do
+    Mambo.Bot.send_msg(<<?\n, @moduledoc>>, cid)
+    {:ok, []}
+  end
+
   def handle_event({:msg, {".help wtc", _, {cid,_,_}}}, _) do
     Mambo.Bot.send_msg(<<?\n, @moduledoc>>, cid)
+    {:ok, []}
+  end
+
+  def handle_event({:privmsg, {".help whatthecommit", _, {clid,_}}}, _) do
+    Mambo.Bot.send_privmsg(<<?\n, @moduledoc>>, clid)
     {:ok, []}
   end
 
