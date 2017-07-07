@@ -1,3 +1,8 @@
-[ "hackney": {:git, "git://github.com/benoitc/hackney.git", "ee982af5a15b58714761988630105dd92ebbbcab", []},
-  "jsx": {:git, "git://github.com/talentdeficit/jsx.git", "9cb8703beecaf4c39e3dbfa293c747a0e7aa6450", []},
-  "mimetypes": {:git, "git://github.com/spawngrid/mimetypes.git", "47d37a977a7d633199822bf6b08353007483d00f", [ref: "master"]} ]
+%{"certifi": {:git, "https://github.com/certifi/erlang-certifi", "fc75f3357932d042b0306fc60ca1353cec2a4fa7", [tag: "1.2.1"]},
+  "hackney": {:git, "https://github.com/benoitc/hackney.git", "77a0839afc49d7dabe41bf43dcad8e3ba9455c7d", []},
+  "idna": {:git, "https://github.com/benoitc/erlang-idna", "58f09dcd44faf3c685c350cf72bde1e85fc5895d", [tag: "5.0.2"]},
+  "jsx": {:git, "https://github.com/talentdeficit/jsx.git", "d4b6d3dc5fd9e759ff7a0c476654ea5124f5bae9", []},
+  "metrics": {:git, "https://github.com/benoitc/erlang-metrics", "c6eb4dcf29f9e907539915e2ab996f40c2ec7e8e", [tag: "1.0.1"]},
+  "mimerl": {:git, "https://github.com/benoitc/mimerl", "678aba028a690da6822c87410d475841c048b6bf", [tag: "1.0.2"]},
+  "ssl_verify_fun": {:git, "https://github.com/deadtrickster/ssl_verify_fun.erl", "33406f6decdcb9f03cf1e69e34728a288af156a0", [tag: "1.1.1"]},
+  "unicode_util_compat": {:hex, :unicode_util_compat, "0.2.0", "dbbccf6781821b1c0701845eaf966c9b6d83d7c3bfc65ca2b78b88b8678bfa35", [:rebar3], []}}
