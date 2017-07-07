@@ -3,6 +3,9 @@
 /tmp
 /releases
 /Mnesia.nonode@nohost
+/Mnesia.nonode@nohost.*
 settings.json
+settings.json.*
 erl_crash.dump
+*.sh
 *.ez
