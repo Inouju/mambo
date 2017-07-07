@@ -189,7 +189,7 @@ defmodule Mambo.Helpers do
   """
   @spec get_tweet_id(String.t) :: String.t | nil
   def get_tweet_id(line) do
-    case Regex.run(~r"\bhttps?://(?:www\.|mobile\.)?twitter.com/.+/status(?:es)?/([0-9]{18})", line) do
+    case Regex.run(~r"^(?:\[(?:u|U)(?:r|R)(?:l|L)\])?https?://(?:www\.|mobile\.)?twitter.com/.+/status(?:es)?/([0-9]{18})", line) do
       nil -> nil
       [_, id] -> id
     end
