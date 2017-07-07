@@ -16,7 +16,6 @@
     {"name": "Title", "args": []},
     {"name": "Urban", "args": []},
     {"name": "Random", "args": []},
-    {"name": "Google", "args": []},
     {"name": "Quotes", "args": []},
     {"name": "Rainbow", "args": []},
     {"name": "Private", "args": []},
@@ -30,6 +29,7 @@
     {"name": "Lastfm", "args": "LASTFM API KEY HERE"},
     {"name": "Youtube", "args": "YOUTUBE API KEY HERE"},
     {"name": "Wolframalpha", "args": "WOLFRAMALPHA API KEY HERE"},
+    {"name": "Google", "args": ["GOOGLE CUSTOM SEARCH API KEY HERE", "GOOGLE CUSTOM SEARCH ENGINE ID (CX)"]},
     {"name": "Twitter", "args": ["TWITTER CONSUMER KEY","TWITTER CONSUMER SECRET"]}
   ]
 }

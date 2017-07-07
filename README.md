@@ -15,6 +15,8 @@ This project was originally written by MrShankly, and is being updated by Inouju
 * The script `gif.ex` also requires [ImageMagick](http://www.imagemagick.org/script/binary-releases.php) to be installed.
 
 Some plugins require access to certain APIs:
+* [Google](https://developers.google.com/custom-search/json-api/v1/overview) for `google.ex`
+* [Custom Search](https://cse.google.com/cse/all) for `google.ex`
 * [Twitter](https://dev.twitter.com/) for `twitter.ex`
 * [WolframAlpha](http://products.wolframalpha.com/api/) for `wolframalpha.ex`
 * [YouTube](https://developers.google.com/youtube/) for `youtube.ex`
