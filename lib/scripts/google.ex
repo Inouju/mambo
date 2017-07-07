@@ -63,12 +63,12 @@ defmodule Google do
     case :hackney.get(url, [], <<>>, []) do
       {:ok, 200, _, client} ->
         {:ok, body} = :hackney.body(client)
-        case hd(:jsx.decode(body, [{:labels, :atom}])[:items]) do
-          r ->
-            result = r[:link]
-            answer.("[b]Google:[/b] #{Mambo.Helpers.format_url(result)}")
-          [] ->
+        case :jsx.decode(body, [{:labels, :atom}])[:items] do
+          nil ->
             answer.("[b]Google:[/b] No result.")
+          r ->
+            result = hd(r)[:link]
+            answer.("[b]Google:[/b] #{Mambo.Helpers.format_url(result)}")
         end
       _ ->
         answer.("Something went wrong.")
