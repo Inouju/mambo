@@ -7,7 +7,7 @@ defmodule Mambo.Helpers do
 
   @entities Map.new [
     {"quot",?"}, {"amp",?&}, {"apos",?'}, {"lt",?<}, {"gt",?>},
-    {"nbsp",? }, {"iexcl",?¡}, {"cent",?¢}, {"pound",?£}, {"curren",?¤},
+    {"nbsp",?\s}, {"iexcl",?¡}, {"cent",?¢}, {"pound",?£}, {"curren",?¤},
     {"yen",?¥}, {"brvbar",?¦}, {"sect",?§}, {"uml",?¨}, {"copy",?©},
     {"ordf",?ª}, {"laquo",?«}, {"not",?¬}, {"reg",?®}, {"macr",?¯},
     {"deg",?°}, {"plusmn",?±}, {"sup2",?²}, {"sup3",?³}, {"acute",?´},
@@ -97,7 +97,7 @@ defmodule Mambo.Helpers do
   defp escape("", es), do: Enum.reverse(es) |> List.to_string
   defp escape(<<?\\, r :: binary>>, es), do: escape(r, ["\\\\" | es])
   defp escape(<<?/,  r :: binary>>, es), do: escape(r, ["\\/"  | es])
-  defp escape(<<? ,  r :: binary>>, es), do: escape(r, ["\\s"  | es])
+  defp escape(<<?\s,  r :: binary>>, es), do: escape(r, ["\\s" | es])
   defp escape(<<?|,  r :: binary>>, es), do: escape(r, ["\\p"  | es])
   defp escape(<<?\a, r :: binary>>, es), do: escape(r, ["\\a"  | es])
   defp escape(<<?\b, r :: binary>>, es), do: escape(r, ["\\b"  | es])
@@ -119,7 +119,7 @@ defmodule Mambo.Helpers do
   defp unescape("", es), do: Enum.reverse(es) |> List.to_string
   defp unescape(<<"\\\\", r :: binary>>, es), do: unescape(r, [?\\ | es])
   defp unescape(<<"\\/",  r :: binary>>, es), do: unescape(r, [?/  | es])
-  defp unescape(<<"\\s",  r :: binary>>, es), do: unescape(r, [?   | es])
+  defp unescape(<<"\\s",  r :: binary>>, es), do: unescape(r, [?\s | es])
   defp unescape(<<"\\p",  r :: binary>>, es), do: unescape(r, [?|  | es])
   defp unescape(<<"\\a",  r :: binary>>, es), do: unescape(r, [?\a | es])
   defp unescape(<<"\\b",  r :: binary>>, es), do: unescape(r, [?\b | es])
