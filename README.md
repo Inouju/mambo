@@ -10,7 +10,7 @@ This project was originally written by MrShankly, and is being updated by Inouju
 
 ### Requirements
 * Erlang (18.0 or later) - there are pre built packages in the [Erlang Solutions Downloads page](http://www.erlang.org/downloads)
-* Elixir 1.2
+* Elixir >1.2
 * Server query login credentials
 * The script `gif.ex` also requires [ImageMagick](http://www.imagemagick.org/script/binary-releases.php) to be installed.
 
@@ -92,7 +92,7 @@ Here's the full list of provided scripts:
 | [`admin.ex`](https://github.com/inouju/mambo/blob/master/lib/scripts/admin.ex#L2-L10) | `.mute`,`.unmute`,`.gm <message>`,`.rename <name>` |
 | [`benis.ex`](https://github.com/inouju/mambo/blob/master/lib/scripts/benis.ex#L2-L7) | `.benis <expression>` |
 | [`brainfuck.ex`](https://github.com/inouju/mambo/blob/master/lib/scripts/brainfuck.ex#L2-L7) | `.bf <brainfuck_expression>` |
-| [`cannedreplies.ex`](https://github.com/inouju/mambo/blob/master/lib/scripts/cannedreplies.ex#L2-L13) | `cool`,`gface`,`goface`,`edgyface`,`dface`,`ggface`,`chownface` |
+| [`cannedreplies.ex`](https://github.com/inouju/mambo/blob/master/lib/scripts/cannedreplies.ex#L2-L13) | `cool`,`gface`,`goface`,`edgyface`,`dface`,`ggface`,`chownface`,`shrug`,`.shrug` |
 | [`doge.ex`](https://github.com/Inouju/mambo/blob/master/lib/scripts/doge.ex) | `.doge`, `.doge <amount>` |
 | [`eightball.ex`](https://github.com/inouju/mambo/blob/master/lib/scripts/eightball.ex#L2-L7) | `.8ball <question>` |
 | [`gif.ex`](https://github.com/inouju/mambo/blob/master/lib/scripts/gif.ex#L2-L10) | `.gif <gif_link>` |
@@ -102,7 +102,7 @@ Here's the full list of provided scripts:
 | [`private.ex`](https://github.com/inouju/mambo/blob/master/lib/scripts/private.ex#L2-L7) | `.private` |
 | [`quotes.ex`](https://github.com/inouju/mambo/blob/master/lib/scripts/quotes.ex#L2-L11) | `.quote`,`.quote <id>`,`.quote add <quote>`,`.quote find <search query>`,`.quote rm <id` |
 | [`rainbow.ex`](https://github.com/inouju/mambo/blob/master/lib/scripts/rainbow.ex#L2-L8) | `.r <expression>`,`.rainbow <expression>` |
-| [`random.ex`](https://github.com/inouju/mambo/blob/master/lib/scripts/random.ex#L2-L10) | `.roll`,`.rock`,`.paper`,`.scissors` |
+| [`random.ex`](https://github.com/inouju/mambo/blob/master/lib/scripts/random.ex#L2-L10) | `.roll`, `.roll <# of dice>d<sides>`,`.roll <max>`,`.rock`,`.paper`,`.scissors` |
 | [`sux.ex`](https://github.com/inouju/mambo/blob/master/lib/scripts/sux.ex#L2-L7) | `.sux <expression>` |
 | [`title.ex`](https://github.com/inouju/mambo/blob/master/lib/scripts/title.ex#L2-L8) | **none** |
 | [`translate.ex`](https://github.com/inouju/mambo/blob/master/lib/scripts/translate.ex#L2-L8) |  `.tl <phrase>`,`.translate <phrase>`,`.translate <input language> <target language> <phrase>` |
