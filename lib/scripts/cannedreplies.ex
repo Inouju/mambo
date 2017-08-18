@@ -21,7 +21,9 @@ defmodule Cannedreplies do
               {"edgyface", "(ケ≖‿≖)ケ"},
               {"dface", "ಠ_ಠ"},
               {"ggface", "G_G"},
-              {"kawaiiface", "(◕.◕✿)"}
+              {"kawaiiface", "(◕.◕✿)"},
+              {"shrug", "¯\\_(ツ)_/¯"},
+              {".shrug", "¯\\_(ツ)_/¯"}
             ]
 
   def init(_) do
