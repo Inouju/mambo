@@ -4,6 +4,8 @@ defmodule Random do
 
   Examples:
     .roll
+    .roll <max number>
+    .roll 2d6+11 - rolls 2 6-sided die and adds 11
     .rock
     .paper
     .scissors
@@ -25,13 +27,13 @@ defmodule Random do
     {:ok, []}
   end
 
-  def handle_event({:msg, {".roll", _, {cid,_,_}}}, _) do
-    Mambo.Bot.send_msg(roll, cid)
+  def handle_event({:msg, {<<".roll", dice :: binary>>, _, {cid,_,_}}}, _) do
+    handle_roll(dice) |> Mambo.Bot.send_msg(cid)
     {:ok, []}
   end
 
-  def handle_event({:privmsg, {".roll", _, {clid,_}}}, _) do
-    Mambo.Bot.send_privmsg(roll, clid)
+  def handle_event({:privmsg, {<<".roll", dice :: binary>>,  _, {clid,_}}}, _) do
+    handle_roll(dice) |> Mambo.Bot.send_privmsg(clid)
     {:ok, []}
   end
 
@@ -71,9 +73,69 @@ defmodule Random do
 
   # Helpers
 
-  defp roll() do
-    :random.seed(:os.timestamp())
-    Integer.to_string(:random.uniform(100))
+  defp handle_roll(dice) do
+    dice = String.replace(dice, " ", "")
+    case String.split(dice, "d", trim: true) do
+      [d, s] ->
+      	case Integer.parse(d) do
+          {dnum, _} ->
+      	    case Integer.parse(s) do
+              {snum, ""} ->
+                roll_s(dnum, dnum * snum)
+              {snum, mod} ->
+                roll_s(dnum, dnum * snum, parse_mods(mod))
+              :error ->
+                "Please use an integer."
+            end
+          :error ->
+            "Please use an integer."
+        end
+      [d] ->
+      	case Integer.parse(d) do
+          {num, _} ->
+            roll_s(1, num)
+          :error ->
+            "Please use an integer."
+        end
+      [] ->
+        roll_s(1, 100)
+    end
+  end
+
+  defp parse_mods(mods) do
+    sign = 1
+    if String.starts_with?(mods, "-") do
+      sign = -1
+    end
+    next_num = String.slice(mods, 1..String.length(mods))
+    case Integer.parse(next_num) do
+      {num, ""} ->
+        num * sign
+      {num, _} ->
+        (num * sign) + parse_mods(String.slice(next_num, 1..String.length(next_num)))
+      :error ->
+        0
+    end
+  end
+
+  defp roll(min, max) do
+    min = abs(min)
+    max = abs(max)
+    if min > :math.pow(10, 256) do
+      min = :math.pow(10, 256)
+    end    
+    if max > :math.pow(10, 256) do
+      max = :math.pow(10, 256)
+    end    
+    :rand.uniform * (max - min + 1) + min |> trunc
+  end
+
+  defp roll_s(min, max, mod) do
+    roll(min, max) + mod |> Integer.to_string
+  end
+
+  defp roll_s(min, max) do
+    roll(min, max) |> Integer.to_string
   end
 
   defp rps(p1, p2) do
@@ -95,7 +157,6 @@ defmodule Random do
   end
 
   defp attack() do
-    :random.seed(:erlang.timestamp())
-    Enum.at(["rock", "paper", "scissors"], :random.uniform(3) - 1)
+    Enum.at(["rock", "paper", "scissors"], :rand.uniform(3) - 1)
   end
 end
