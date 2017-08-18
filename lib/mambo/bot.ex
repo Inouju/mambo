@@ -328,11 +328,10 @@ defmodule Mambo.Bot do
     {:noreply, state}
   end
 
-  def handle_info({:tcp, _, <<@notify_msg, r :: binary>>}, {_, settings(bot_id: bid), _} = state) do
-    IO.puts("inside handle_info notifytextmessage: #{r}")
+  def handle_info({:tcp, _, <<@notify_msg, r :: binary>>}, {_, s, _} = state) do
     {:ok, re} = Regex.compile("targetmode=([1-2]) msg=(\\S*)(?: target=\\d*)? " <>
       "invokerid=(\\d*) invokername=(.*) invokeruid=(.*)", "i")
-
+    bid = s[:bot_id]
     case Regex.run(re, r) do
       [_, _, _, _, _, ^bid] ->
         {:noreply, state}
