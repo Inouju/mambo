@@ -57,7 +57,6 @@ defmodule Eightball do
   # Helpers
 
   defp shake() do
-    :random.seed(:os.timestamp)
     Enum.random(@options)
   end
 end
