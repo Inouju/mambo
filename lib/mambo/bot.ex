@@ -3,7 +3,7 @@ defmodule Mambo.Bot do
   Responsible for connecting to the teamspeak server, also acts as a bridge
   between the teamspeak server and the plugins. Supervised by `Mambo.Supervisor`.
   """
-  
+
   require Record
   use GenServer
   @bot __MODULE__
@@ -391,8 +391,9 @@ defmodule Mambo.Bot do
   # already received. Notice the state is a 4 element tuple, this is to make
   # sure that we haven't already receive the channellist.
   def handle_info({:tcp, _, data}, {socket, s, [], channellist}) do
-    if String.ends_with?(data, "error id=0 msg=ok\n\r") do
-      {ids, dc} = parse_channellist(channellist <> data)
+    channellist = channellist <> data
+    if String.ends_with?(channellist, "error id=0 msg=ok\n\r") do
+      {ids, dc} = parse_channellist(channellist)
       watchers = add_watchers(ids, s)
       {:noreply, {socket, List.keyreplace(s, :default_channel, 0, {:default_channel, dc}), watchers}}
     else
